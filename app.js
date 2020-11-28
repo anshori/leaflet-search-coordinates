@@ -1,5 +1,5 @@
 /* Initial Map */
-let tooltip = 'Drag the marker<br>or drag the map<br>to change the coordinates<br>of the location';
+let tooltip = 'Drag the marker or move the map<br>to change the coordinates<br>of the location';
 let center = [-7.801389645,110.364775452];
 let map = L.map('map').setView(center, 15); //lat, long, zoom
 map.scrollWheelZoom.disable(); //disable zoom with scroll
@@ -27,7 +27,7 @@ marker.openTooltip();
 marker.on('dragend', dragMarker);
 
 //Move Map
-map.addEventListener('move', mapMovement);
+map.addEventListener('moveend', mapMovement);
 
 function dragMarker (e) {
   let latlng = e.target.getLatLng();
@@ -38,7 +38,6 @@ function dragMarker (e) {
 
   //Change the map center based on the marker location
   map.flyTo(new L.LatLng(latlng.lat.toFixed(9), latlng.lng.toFixed(5)));
-  // marker.openTooltip();
 }
 
 function mapMovement (e) {
@@ -48,14 +47,8 @@ function mapMovement (e) {
   document.getElementById("latitude").value = mapcenter.lat.toFixed(5);
   document.getElementById("longitude").value = mapcenter.lng.toFixed(5);
 
-  //Remove marker
-  marker.remove();
-
   //Create marker
-  marker = L.marker([mapcenter.lat.toFixed(5), mapcenter.lng.toFixed(5)], {draggable: true});
-  marker.addTo(map);
-  marker.bindTooltip(tooltip);
-  // marker.openTooltip();
+  marker.setLatLng([mapcenter.lat.toFixed(5), mapcenter.lng.toFixed(5)]).update();
   marker.on('dragend', dragMarker);
 }
 
